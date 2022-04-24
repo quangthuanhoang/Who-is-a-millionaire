@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="goQueue()">goQueue</button>
+<button onclick="createRoom()">tao room</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    socket.on("message", console.log)
+    socket.on("msg", console.log)
+    socket.on("startGame", ({startIn}) => {
+        console.log("bat dau sau", startIn)
+    })
+    socket.on("question", console.log)
+
+    function goQueue() {
+        socket.emit("goQueue", "Dm Thuan" + Date.now())
+    }
+
+    function createRoom() {
+        socket.emit("createRoom", "Room bo doi")
+    }
+</script>
+</body>
+</html>
