@@ -7,6 +7,7 @@
 <body>
 <button onclick="goQueue()">goQueue</button>
 <button onclick="createRoom()">tao room</button>
+<div id="question"></div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
@@ -15,14 +16,17 @@
     socket.on("startGame", ({startIn}) => {
         console.log("bat dau sau", startIn)
     })
-    socket.on("question", console.log)
+    socket.on("question", (data) => {
+        const questionElement = document.getElementById('question').innerText = data.question.question
+        console.log(data)
+    })
 
     function goQueue() {
-        socket.emit("goQueue", "Dm Thuan" + Date.now())
+        socket.emit("goQueue", "Vào hàng đợi nhé" + Date.now())
     }
 
     function createRoom() {
-        socket.emit("createRoom", "Room bo doi")
+        socket.emit("createRoom", "Tạo phòng")
     }
 </script>
 </body>

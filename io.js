@@ -12,7 +12,7 @@ function getRoomKey(user1, user2) {
 }
 
 const TIME_DELAY_START = 3000
-const TIME_PER_QUESTION = 15000
+const TIME_PER_QUESTION = 3000
 module.exports = function listen(io) {
     io.on('connection', (socket) => {
         console.log('a user connected', socket.id);
@@ -27,12 +27,15 @@ module.exports = function listen(io) {
             }
         })
         socket.on("createRoom", data => {
-            if (!userPendings.includes(socket.id)) {
-                userPendings = userPendings.filter(i => i !== socket.id)
+            if(!userPendings.length) {
+                socket.emit("msg", 'Không có người chơi nào trong phòng đợi')
             }
-            roomCreated.push({
-                create: socket.id
-            })
+            else if (!userPendings.includes(socket.id)) {
+                userPendings = userPendings.filter(i => i !== socket.id)
+                roomCreated.push({
+                    create: socket.id
+                })
+            }
         })
         socket.on("disconnect", () => {
             for (let key in rooms) {
@@ -80,7 +83,7 @@ module.exports = function listen(io) {
             partnerSocket.emit("msg", "Kết nối với đối thủ tên ...")
             io.sockets.in(key).emit('msg', "Kết nối với đối thủ thành công");
             io.sockets.in(key).emit('startGame', {
-                startIn: 3000
+                startIn: TIME_DELAY_START
             });
             setTimeout(() => {
                 for (let i = 1; i < 6; i++) {
@@ -90,7 +93,7 @@ module.exports = function listen(io) {
                         });
                     }, (i - 1) * TIME_PER_QUESTION)
                 }
-            }, 3000)
+            }, TIME_DELAY_START)
             startGame(room)
             console.log("hi")
         }
