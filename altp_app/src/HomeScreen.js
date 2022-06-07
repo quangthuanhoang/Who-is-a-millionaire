@@ -44,7 +44,7 @@ export default HomeScreen = () => {
        <TouchableOpacity onPress={joinRoom} style={{backgroundColor: 'pink', padding: 10}}><Text>Vào phòng</Text></TouchableOpacity>
        <Text>{msg}</Text>
        <TouchableOpacity onPress={startGame} style={{backgroundColor: 'pink', padding: 10}}><Text>Bắt đầu chơi</Text></TouchableOpacity>
-       <Text>{question}</Text>
+       <Text>{question.question}</Text>
       </View>
     );
 }
