@@ -7,8 +7,7 @@ import {socket} from '../elements/Socket'
 const windowWidth = Dimensions.get('window').width;
 export default HomeScreen = () => {
     // const [roomCode, setRoomCode] = useState('');
-    const[roomCode, setRoomCode] = useState('')
-    const[checkNavigate, setCheckNavigate] = useState(false)
+    const[roomId, setRoomId] = useState('ROOM15')
     const navigation = useNavigation()
     //1. Tạo phòng
     useEffect(() => {
@@ -22,15 +21,15 @@ export default HomeScreen = () => {
     //Theo dõi người chơi vào phòng
     const createRoom = () => {
         socket.emit('CREATEROOM')
-        navigation.navigate("RoomWaiting", {roomCode})
+        navigation.navigate("RoomWaiting", {roomId})
     }
     const joinRoom = () => {
-        socket.emit('JOINROOM', roomCode)
-        navigation.navigate("RoomWaiting", {roomCode})
+        socket.emit('JOINROOM', roomId)
+        navigation.navigate("RoomWaiting", {roomId})
     }
     const startGame = () => {
-        socket.emit("STARTGAME",roomCode)
-        navigation.navigate("LineAnswers", {roomCode})
+        socket.emit("STARTGAME",roomId)
+        navigation.navigate("LineAnswers", {roomId})
     }
 
     useEffect(() => {
@@ -49,7 +48,7 @@ export default HomeScreen = () => {
                 <TextInput
                     style={{height: 40}}
                     placeholder="Nhập mã phòng"
-                    onChangeText={newText =>  setRoomCode(newText)}
+                    // onChangeText={newText =>  setRoomId(newText)}
                 />
                 <TouchableOpacity onPress={createRoom}>
                     <ImageBackground source={require('../../assets/imgs/answer.png')} resizeMode="contain"

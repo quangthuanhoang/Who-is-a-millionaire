@@ -6,21 +6,41 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default LineAnswers = ({route}) => {
-    const {roomCode: roomId} = route.params
+    const {roomId} = route.params
     const [question, setQuestion] = useState({})
-    socket.on("question", ({question}) => {
+    const [questionIndex, setQuestionIndex] = useState(0)
+    const [count, setCount] = useState(15);
+    const [notify, setNotify] = useState('');
+    socket.on("question", ({question, currentIndex, time}) => {
         if(question) {
-            console.log('ans', question)
             question.content.forEach(item => {
                 item.select = false
             })
             setQuestion(question)
+            setQuestionIndex(currentIndex)
+            setCount(time)
+
         }
     })
-
+    socket.on("end", ({notify}) => {
+        setNotify(notify)
+    })
+    const handleClick = () => {
+        setInterval(() => {
+          if(!notify) {
+            setCount(prevCount => prevCount - 1);
+          }
+          else {
+            setCount(0)
+          }
+        }, 1000);
+      }
+    useState(() => {
+        handleClick()
+    }, [])
     function answerQuestion(idx) {
+        console.log('idx', idx, route.params)
         socket.emit('ANSWER', {userAnswer: idx, roomId})
-        console.log('Đã trả lời đáp án', idx)
         socket.on("230", console.log)
     }
 
@@ -45,7 +65,30 @@ export default LineAnswers = ({route}) => {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <Text style={styles.questionNumber}>Câu hỏi 2</Text>
+                                <Text style={styles.questionNumber}>Câu hỏi {questionIndex}</Text>
+                            </View>
+
+                            <View style={{
+                                position: 'absolute',
+                                top: -10,
+                                left: 230,
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={styles.questionNumber}>Thời gian: {count}</Text>
+                            </View>
+                            <View style={{
+                                position: 'absolute',
+                                top: -10,
+                                left: 430,
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={styles.questionNumber}>{notify}</Text>
                             </View>
                         </ImageBackground>
                         <ImageBackground source={require('../../assets/imgs/question.png')} resizeMode="contain"

@@ -5,16 +5,16 @@ import {socket} from '../elements/Socket'
 
 const windowWidth = Dimensions.get('window').width;
 export default RoomWaiting = ({route}) => {
-    const {roomCode: roomId} = route.params
+    const {roomId} = route.params
+    const navigation = useNavigation()
     const startGame = () => {
-        socket.emit("STARTGAME",roomCode)
+        socket.emit("STARTGAME",roomId)
         navigation.navigate("LineAnswers", {roomId})
     }
-    socket.on("233", ({check, roomId}) => {
-        if(check) {
-            navigation.navigate("LineAnswers", {roomId})
-        }
-    })
+    socket.on("233", (data) => {
+        console.log('23333333');
+        navigation.navigate("LineAnswers", {roomId})
+      })
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../../assets/imgs/background.jpg')} resizeMode="cover"

@@ -22,15 +22,16 @@ function handle(io) {
         current.timeout = timeout
         if (current.max > MAX_Q) {
             current.completed = 1
-            io.to(roomId).emit('endd', {
-                //Todo: Score
+            io.to(roomId).emit('end', {
+               notify: "Hết giờ",
                 score: 10000
             });
         }
         else {
             io.to(roomId).emit('question', {
                 question: questions[currentIndex],
-                currentIndex
+                currentIndex,
+                time: 5
             });
         }
     })
@@ -64,12 +65,13 @@ function listen(io) {
             })
             // 3. Bắt đầu trò chơi
             socket.on('STARTGAME', (roomId) => {
+                console.log('STARTGAME', roomId)
                 socket.to(roomId).emit("233", {title: 'Trò chơi bắt đầu rồi', check: true, roomId})
                 const questions = genQuestion(MAX_Q)
                 if (!currentRoomQuestions[roomId]) {
                     currentRoomQuestions[roomId] = {
                         questions,
-                        currentIndex: 0,
+                        currentIndex: 1,
                         max: MAX_Q - 1
                     }
                 }
@@ -86,14 +88,11 @@ function listen(io) {
                 let checkAnswer = -1
                 if (currentQuesion.correct === Number(userAnswer)) {
                     socket.emit('230', 1)
-                    if (currentQuesion.correct === Number(userAnswer)) {
-                        checkAnswer = 1
-                    }
+                    checkAnswer = 1
                 } else {
                     socket.emit('230', 0)
                     checkAnswer = 0
                 }
-                console.log('Chuwa ra day a', checkAnswer)
                 if (checkAnswer === 1) {
                     console.log('Đã khớp rồi')
                     currentRoomQuestions[roomId].currentIndex += 1
