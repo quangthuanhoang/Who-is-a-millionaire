@@ -293,71 +293,70 @@ const questions = {
         "correct": 2,
         "content": ["Ethiopia", "Nigeria", "Zambia", "Chad"],
         "question": "Which of these African countries is situated south of the equator?"
-    }]
-}
-const question2 = {
-    1: [{
-        "question": "In what children's game are participants chased by someone designated \"It\"?",
-        "content": ["Tag", "Simon Says", "Charades", "Hopscotch"],
-        "correct": 0
-    }, {
-        "question": "On a radio, stations are changed by using what control?",
-        "content": ["Tuning", "Volume", "Bass", "Treble"],
-        "correct": 0
-    }, {
-        "question": "A college graduate who receives a B.S. degree holds what official title?",
-        "content": ["Bachelor of science", "Business scholar", "Baccalaureate staff", "Brainy student"],
-        "correct": 0
-    }, {
-        "question": "Which of the following telephone area codes is not a toll-free call in the United States?",
-        "content": ["800", "828", "877", "888"],
-        "correct": 1
-    }, {
-        "question": "What part of the human body does glaucoma directly affect?",
-        "content": ["Ear", "Nose", "Throat", "Eye"],
-        "correct": 3
-    }, {
-        "question": "What is the name of Tom Cruise's character in the \"Mission: Impossible\" movies?",
-        "content": ["Frank Mackey", "Mitch McDeere", "Joel Goodson", "Ethan Hunt"],
-        "correct": 3
-    }, {
-        "question": "Which of these materials is used to make vests bulletproof?",
-        "content": ["Kevlar", "Lycra", "Gore-tex", "Polystyrene"],
-        "correct": 0
-    }, {
-        "question": "What animal's name means \"river horse\" in Greek?",
-        "content": ["Platypus", "Hippopotamus", "Rhinoceros", "Manatee"],
-        "correct": 1
-    }, {
-        "question": "To take advantage of the earth's rotation, NASA launches most of its rockets in what direction?",
-        "content": ["North", "East", "South", "West"],
-        "correct": 1
-    }, {
-        "question": "College football's Independence Bowl is played in what city?",
-        "content": ["Philadelphia", "Memphis", "Shreveport", "Tucson"],
-        "correct": 2
-    }, {
-        "question": "Which of these best describes music that is played \"pianissimo\"?",
-        "content": ["Very soft", "Very fast", "Moderately loud", "Loud"],
-        "correct": 0
-    }, {
-        "question": "In Greek mythology, what is the relationship between Oedipus and Antigone?",
-        "content": ["Husband and wife", "Mentor and student", "Father and daughter", "Mother and son"],
-        "correct": 2
-    }, {
-        "question": "The rococo style of art originated in what country?",
-        "content": ["France", "Italy", "Austria", "Spain"],
-        "correct": 0
-    }, {
-        "question": "In Norse mythology, Mjolnir was the name of what?",
-        "content": ["Thor's hammer", "Odin's horse", "Sigmund's sword", "Loki's magic necklace"],
-        "correct": 0
-    }, {
-        "question": "On July 12, 2000, Russia launched a rocket into space bearing the corporate logo of what company?",
-        "content": ["Intel", "Reebok", "Budweiser", "Pizza Hut"],
-        "correct": 3
     }],
-    2: [{
+    6: [
+        {
+            "question": "In what children's game are participants chased by someone designated \"It\"?",
+            "content": ["Tag", "Simon Says", "Charades", "Hopscotch"],
+            "correct": 0
+        }, {
+            "question": "On a radio, stations are changed by using what control?",
+            "content": ["Tuning", "Volume", "Bass", "Treble"],
+            "correct": 0
+        }, {
+            "question": "A college graduate who receives a B.S. degree holds what official title?",
+            "content": ["Bachelor of science", "Business scholar", "Baccalaureate staff", "Brainy student"],
+            "correct": 0
+        }, {
+            "question": "Which of the following telephone area codes is not a toll-free call in the United States?",
+            "content": ["800", "828", "877", "888"],
+            "correct": 1
+        }, {
+            "question": "What part of the human body does glaucoma directly affect?",
+            "content": ["Ear", "Nose", "Throat", "Eye"],
+            "correct": 3
+        }, {
+            "question": "What is the name of Tom Cruise's character in the \"Mission: Impossible\" movies?",
+            "content": ["Frank Mackey", "Mitch McDeere", "Joel Goodson", "Ethan Hunt"],
+            "correct": 3
+        }, {
+            "question": "Which of these materials is used to make vests bulletproof?",
+            "content": ["Kevlar", "Lycra", "Gore-tex", "Polystyrene"],
+            "correct": 0
+        }, {
+            "question": "What animal's name means \"river horse\" in Greek?",
+            "content": ["Platypus", "Hippopotamus", "Rhinoceros", "Manatee"],
+            "correct": 1
+        }, {
+            "question": "To take advantage of the earth's rotation, NASA launches most of its rockets in what direction?",
+            "content": ["North", "East", "South", "West"],
+            "correct": 1
+        }, {
+            "question": "College football's Independence Bowl is played in what city?",
+            "content": ["Philadelphia", "Memphis", "Shreveport", "Tucson"],
+            "correct": 2
+        }, {
+            "question": "Which of these best describes music that is played \"pianissimo\"?",
+            "content": ["Very soft", "Very fast", "Moderately loud", "Loud"],
+            "correct": 0
+        }, {
+            "question": "In Greek mythology, what is the relationship between Oedipus and Antigone?",
+            "content": ["Husband and wife", "Mentor and student", "Father and daughter", "Mother and son"],
+            "correct": 2
+        }, {
+            "question": "The rococo style of art originated in what country?",
+            "content": ["France", "Italy", "Austria", "Spain"],
+            "correct": 0
+        }, {
+            "question": "In Norse mythology, Mjolnir was the name of what?",
+            "content": ["Thor's hammer", "Odin's horse", "Sigmund's sword", "Loki's magic necklace"],
+            "correct": 0
+        }, {
+            "question": "On July 12, 2000, Russia launched a rocket into space bearing the corporate logo of what company?",
+            "content": ["Intel", "Reebok", "Budweiser", "Pizza Hut"],
+            "correct": 3
+        }],
+    7: [{
         "question": "In the U.S., if it's not Daylight Saving Time, it's what?",
         "content": ["Borrowed time", "Overtime", "Standard time", "Party time"],
         "correct": 2
@@ -418,7 +417,7 @@ const question2 = {
         "content": ["Chordata", "Mammalia", "Primate", "Hominidae"],
         "correct": 3
     }],
-    3: [{
+    8: [{
         "question": "An albino gorilla usually has what color fur?",
         "content": ["Brown", "Black", "White", "Golden"],
         "correct": 2
@@ -479,7 +478,7 @@ const question2 = {
         "content": ["Canada", "United States", "England", "France"],
         "correct": 0
     }],
-    4: [{
+    9: [{
         "question": "Which of the following consumer goods is the Gerber Products Co. best known for?",
         "content": ["Potato chips", "Fine wines", "Chewing gum", "Baby Food"],
         "correct": 3
@@ -540,7 +539,7 @@ const question2 = {
         "content": ["Yalta", "The Hague", "St. Petersburg", "Geneva"],
         "correct": 1
     }],
-    5: [{
+    10: [{
         "question": "What kind of animal traditionally lives in a sty?",
         "content": ["Cow", "Pig", "Fox", "Teenager"],
         "correct": 1
@@ -600,19 +599,20 @@ const question2 = {
         "question": "In 1893, what country was the first to grant women the right to vote?",
         "content": ["Canada", "Sweden", "New Zealand", "Denmark"],
         "correct": 2
-    }]
+    }
+    ]
 }
 
 function randomNumber(maximum, minimum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 }
 
-function genQuestion(index) {
-    const pickup = randomNumber(2, 1)
-    if (pickup === 1) {
-        return questions[index][randomNumber(questions[index].length - 1, 1)]
-    }
-    return question2[index][randomNumber(question2[index].length - 1, 1)]
+function genQuestion(length) {
+    const pickup = randomNumber(Object.keys(questions).length, 1)
+    const q = questions[pickup]
+    return q.splice(0, length)
 }
+
+genQuestion()
 
 module.exports = genQuestion
