@@ -103,53 +103,45 @@ function listen(io) {
     socket.on("ANSWER", ({ roomId, userAnswer, indexQuestion }) => {
       const current = currentRoomQuestions[roomId];
       const currentQuesion = current.questions[current.currentIndex];
-      let checkAnswer = -1;
-      console.log("hàhahfhfhahfhafhahfha");
-      //   if (currentQuesion.correct === Number(userAnswer)) {
-      //     checkAnswer = 1;
-      //   } else {
-      //     checkAnswer = 0;
-      //   }
+      console.log(indexQuestion, currentQuesion);
 
       const index = roomActives.findIndex((object) => {
         return object.roomId === roomId;
       });
       if (roomActives[index].user1.id === socket.id) {
-        console.log("user11111");
+        console.log("user11111", socket.id);
         if (currentQuesion.correct === Number(userAnswer)) {
           roomActives[index].user1.score += 10;
-          io.to(roomId).emit("230", {
-            user1: roomActives[index].user1,
-            user2: roomActives[index].user2,
-          });
+
           currentRoomQuestions[roomId].currentIndex += 1;
           eventEmitter.emit("nextQuestion", roomId);
-        } else {
-          roomActives[index].user1.score -= 5;
-          io.to(roomId).emit("230", {
-            user1: roomActives[index].user1,
-            user2: roomActives[index].user2,
-          });
+        } else if (currentQuesion.correct !== Number(userAnswer)) {
+          roomActives[index].user1.score -= 10;
+
+          currentRoomQuestions[roomId].currentIndex += 1;
+          eventEmitter.emit("nextQuestion", roomId);
         }
       } else if (roomActives[index].user2.id === socket.id) {
-        console.log("user2222");
+        console.log("user2222", socket.id);
         if (currentQuesion.correct === Number(userAnswer)) {
           roomActives[index].user2.score += 10;
-          io.to(roomId).emit("230", {
-            user1: roomActives[index].user1,
-            user2: roomActives[index].user2,
-          });
+          //   io.to(roomId).emit("230", {
+          //     user1: roomActives[index].user1,
+          //     user2: roomActives[index].user2,
+          //   });
           currentRoomQuestions[roomId].currentIndex += 1;
           eventEmitter.emit("nextQuestion", roomId);
-        } else {
-          roomActives[index].user2.score -= 5;
-          io.to(roomId).emit("230", {
-            user1: roomActives[index].user1,
-            user2: roomActives[index].user2,
-          });
+        } else if (currentQuesion.correct !== Number(userAnswer)) {
+          roomActives[index].user2.score -= 10;
+
+          currentRoomQuestions[roomId].currentIndex += 1;
+          eventEmitter.emit("nextQuestion", roomId);
         }
       }
-
+      //   io.to(roomId).emit("230", {
+      //     user1: roomActives[index].user1,
+      //     user2: roomActives[index].user2,
+      //   });
       //   if (
       //     roomActives[index].user1.answered &&
       //     roomActives[index].user1.answered
@@ -175,8 +167,8 @@ function listen(io) {
     });
 
     socket.on("test", () => {
-        socket.emit("ré")
-    })
+      socket.emit("ré");
+    });
   });
 }
 

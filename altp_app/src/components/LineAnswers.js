@@ -57,23 +57,16 @@ export default LineAnswers = ({route}) => {
     socket.emit('ANSWER', {userAnswer: idx, roomId, indexQuestion: index});
   }
 
- useEffect(()=> {
+  useEffect(() => {
     socket.on('230', ({user1, user2}) => {
-        setUser2(user2);
-        setUser2(user1);
-        console.log('hi');
-      });
- }, [])
+      setUser2(user2);
+      setUser2(user1);
+    });
+  }, []);
   return (
     <>
       {question?.content ? (
         <View style={styles.container}>
-          <TouchableOpacity
-            onPress={() => {
-              socket.emit('ANSWER', {userAnswer: 0, roomId, indexQuestion: 0});
-            }}>
-            <Text> Bấm đi</Text>
-          </TouchableOpacity>
           <ImageBackground
             source={require('../../assets/imgs/background.jpg')}
             resizeMode="cover"
@@ -84,8 +77,12 @@ export default LineAnswers = ({route}) => {
             /> */}
             <View style={{flex: 1, backgroundColor: '#fefef1'}}>
               <Text>Thông tin người chơi</Text>
-              <Text>Điểm người chơi 1: {user1.score}</Text>
-              <Text>Điểm người chơi 2: {user2.score}</Text>
+              <Text>
+                {user1.id}: {user1.score}
+              </Text>
+              <Text>
+                {user2.id}: {user2.score}
+              </Text>
               <Text style={styles.questionNumber}>{notify}</Text>
             </View>
 
