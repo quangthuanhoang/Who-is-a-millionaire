@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import {View } from 'react-native';
-import SignIn from './src/components/SignIn';
+import SigResultnIn from './src/components/Result';
 import HomeScreen from './src/components/HomeScreen';
 import LineAnswers from './src/components/LineAnswers';
 import RoomWaiting from "./src/components/RoomWaiting";
@@ -20,6 +20,7 @@ const App = () => {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="LineAnswers" component={LineAnswers} />
         <Stack.Screen name="RoomWaiting" component={RoomWaiting} />
+        <Stack.Screen name="Result" component={Result} />
       </Stack.Navigator>
     </NavigationContainer>
  

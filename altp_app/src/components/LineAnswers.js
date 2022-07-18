@@ -34,10 +34,12 @@ export default LineAnswers = ({route}) => {
       setUser2(user2);
     }
   });
-  socket.on('end', ({notify}) => {
-    setNotify(notify);
-  });
-
+  useEffect(() => {
+    socket.on('end', ({notify, user1, user2}) => {
+      setNotify(notify);
+      navigation.navigate('Result', {user1, user2});
+    });
+  }, []);
   const handleClick = () => {
     const timer = setInterval(() => {
       if (!notify) {
@@ -128,7 +130,7 @@ export default LineAnswers = ({route}) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  {/* <Text style={styles.questionNumber}>{notify}</Text> */}
+                  <Text style={styles.questionNumber}>{notify}</Text>
                 </View>
               </ImageBackground>
               <ImageBackground
