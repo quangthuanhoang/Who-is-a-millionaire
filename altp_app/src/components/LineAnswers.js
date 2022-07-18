@@ -57,11 +57,13 @@ export default LineAnswers = ({route}) => {
     socket.emit('ANSWER', {userAnswer: idx, roomId, indexQuestion: index});
   }
 
-  socket.on('230', ({user1, user2}) => {
-    // setUser2(user2);
-    // setUser2(user1);
-    console.log('hi');
-  });
+ useEffect(()=> {
+    socket.on('230', ({user1, user2}) => {
+        setUser2(user2);
+        setUser2(user1);
+        console.log('hi');
+      });
+ }, [])
   return (
     <>
       {question?.content ? (
