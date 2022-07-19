@@ -56,7 +56,7 @@ export default LineAnswers = ({route}) => {
   }, []);
   function answerQuestion(idx) {
     const {index} = question;
-    socket.emit('ANSWER', {userAnswer: idx, roomId, indexQuestion: index});
+    socket.emit('ANSWER', {userAnswer: idx, roomId, indexQuestion: +index + 1});
   }
 
   useEffect(() => {
@@ -96,7 +96,7 @@ export default LineAnswers = ({route}) => {
                 <View
                   style={{
                     position: 'absolute',
-                    top: -10,
+                    top: -15,
                     left: 0,
                     right: 0,
                     bottom: 0,
@@ -104,7 +104,7 @@ export default LineAnswers = ({route}) => {
                     alignItems: 'center',
                   }}>
                   <Text style={styles.questionNumber}>
-                    Câu hỏi {questionIndex}
+                    Câu hỏi {+questionIndex + 1}
                   </Text>
                 </View>
 
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     top: 0,
-    left: 50,
+    left: 95,
     right: 0,
     bottom: 0,
     justifyContent: 'center',

@@ -61,7 +61,7 @@ export default HomeScreen = () => {
         />
         <TouchableOpacity onPress={createRoom}>
           <ImageBackground
-            source={require('../../assets/imgs/answer.png')}
+            source={require('../../assets/imgs/menu.png')}
             resizeMode="contain"
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>
@@ -71,7 +71,7 @@ export default HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={joinRoom}>
           <ImageBackground
-            source={require('../../assets/imgs/answer.png')}
+            source={require('../../assets/imgs/menu.png')}
             resizeMode="contain"
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>
@@ -82,7 +82,7 @@ export default HomeScreen = () => {
 
         <TouchableOpacity onPress={startGame}>
           <ImageBackground
-            source={require('../../assets/imgs/answer.png')}
+            source={require('../../assets/imgs/menu.png')}
             resizeMode="contain"
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>

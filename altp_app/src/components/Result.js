@@ -15,6 +15,10 @@ import {socket} from '../elements/Socket';
 const windowWidth = Dimensions.get('window').width;
 export default Result = ({route}) => {
   const {user1, user2} = route.params;
+  const navigation = useNavigation()
+  const goBackHome = () => {
+    navigation.navigate("HomeScreen")
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -34,6 +38,10 @@ export default Result = ({route}) => {
         <Text>
           {user2.id}: {user2.score}
         </Text>
+
+        <TouchableOpacity onPress={goBackHome}>
+          <Text>Trang chủ</Text>
+        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
