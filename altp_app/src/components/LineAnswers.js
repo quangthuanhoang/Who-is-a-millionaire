@@ -74,21 +74,61 @@ export default LineAnswers = ({route}) => {
             source={require('../../assets/imgs/background.jpg')}
             resizeMode="cover"
             style={styles.image}>
-            {/* <Image
-              style={styles.logoImg1}
-              source={require('../../assets/imgs/logo.png')}
-            /> */}
-            <View style={{ backgroundColor: 'red'}}>
-              <Text>Thông tin người chơi</Text>
-              <Text>
-                {user1.id}: {user1.score}
-              </Text>
-              <Text>
-                {user2.id}: {user2.score}
-              </Text>
-              <Text style={styles.questionNumber}>{notify}</Text>
+           <View style={{paddingTop:40, paddingBottom: 40}}>
+           <ImageBackground
+              style={styles.logoImgInfor}
+              resizeMode="contain"
+              source={require('../../assets/imgs/infor.png')}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                 <View style={{paddingHorizontal: 20}}>
+                 <Text style={styles.questionNumber}>Bạn</Text>
+                 <Text style={{color: '#df7821', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>
+                  {user1.score}
+                  </Text>
+                 </View>
+                 <View style={{paddingHorizontal: 20, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                 <Text style={styles.questionNumber}>Đối thủ</Text>
+                 <Text style={{color: 'white', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>
+                   {user2.score}
+                  </Text>
+                 </View>
+                
             </View>
-
+                </View>
+            </ImageBackground>
+           <View style={{position: 'absolute',right: -45, bottom: 10}}>
+           <ImageBackground
+              style={styles.logoImg1}
+               resizeMode="cover"
+              source={require('../../assets/imgs/time.png')}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  }}>
+                  <Text style={styles.time}>{count}</Text>
+                </View>
+            </ImageBackground>
+           </View>
+         
+            </View>
             <View style={styles.container2}>
               <ImageBackground
                 source={require('../../assets/imgs/number.png')}
@@ -107,31 +147,6 @@ export default LineAnswers = ({route}) => {
                   <Text style={styles.questionNumber}>
                     Câu hỏi {+questionIndex + 1}
                   </Text>
-                </View>
-
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -10,
-                    left: 230,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={styles.questionNumber}>Thời gian: {count}</Text>
-                </View>
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -10,
-                    left: 430,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={styles.questionNumber}>{notify}</Text>
                 </View>
               </ImageBackground>
               <ImageBackground
@@ -200,8 +215,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logoImg1: {
-    width: 300,
-    height: 300,
+    width: 100,
+    height: 100,
+  },
+  logoImgInfor: {
+    width: 250,
+    height: 150,
   },
   image: {
     flex: 1,
@@ -264,5 +283,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 17,
     fontWeight: '500',
+    textAlign: 'center'
+  },
+  time: {
+    color: 'white',
+    fontSize: 40,
+    fontWeight: 'bold'
   },
 });
