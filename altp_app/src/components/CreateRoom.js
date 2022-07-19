@@ -12,25 +12,38 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {socket} from '../elements/Socket';
-
+import Modal from "react-native-modal";
 const windowWidth = Dimensions.get('window').width;
-export default HomeScreen = () => {
+export default CreateRoom = () => {
+  const [name, setName] = useState('');
   // const [roomCode, setRoomCode] = useState('');
   const [roomId, setRoomId] = useState('');
   //   const [roomCode, setRoomcCode] = useState('');r
   const navigation = useNavigation();
+  //1. Tạo phòng
+  socket.on('200', console.log);
+  socket.on('210', ({roomId, user1}) => {
+    navigation.navigate('RoomWaiting', {roomId});
+  });
+  // Thông báo có người chơi khác vào phòng
+  socket.on('211', console.log);
+  socket.on('220', console.log);
 
 
   //Theo dõi người chơi vào phòng
   const createRoom = () => {
-    navigation.navigate("CreateRoom")
+    if(name) {
+        socket.emit('CREATEROOM',name);
+    }
+    else {
+        ToastAndroid.showWithGravity(
+            "Vui lòng nhập đầy đủ thông tin",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+    }
   };
-  const joinRoom = () => {
-    navigation.navigate('JoinRoom');
-  };
-  const joinRandomRoom = () => {
-    navigation.navigate("JoinRandomRoom")
-  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -41,6 +54,12 @@ export default HomeScreen = () => {
           style={styles.logoImg}
           source={require('../../assets/imgs/logo.png')}
         />
+        <TextInput
+          placeholderTextColor='white'
+          style={{height: 60, borderBottomColor: '#ffffff', borderBottomWidth: 3, width: windowWidth*0.8, marginHorizontal: 10, marginVertical: 20, fontSize: 16, color: 'white'}}
+          placeholder="Nhập định dang của bạn"
+          onChangeText={newText => setName(newText)}
+        />
         <TouchableOpacity onPress={createRoom}>
           <ImageBackground
             source={require('../../assets/imgs/button.png')}
@@ -48,27 +67,6 @@ export default HomeScreen = () => {
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>
               <Text style={styles.answerText}>Tạo phòng chơi mới</Text>
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={joinRoom}>
-          <ImageBackground
-            source={require('../../assets/imgs/button.png')}
-            resizeMode="contain"
-            style={styles.buttonStyle}>
-            <View style={styles.answerStyle}>
-              <Text style={styles.answerText}>Tham gia phòng chơi</Text>
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={joinRandomRoom}>
-          <ImageBackground
-            source={require('../../assets/imgs/button.png')}
-            resizeMode="contain"
-            style={styles.buttonStyle}>
-            <View style={styles.answerStyle}>
-              <Text style={styles.answerText}>Vào phòng ngẫu nhiên</Text>
             </View>
           </ImageBackground>
         </TouchableOpacity>

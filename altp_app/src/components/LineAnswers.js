@@ -6,7 +6,8 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
-  Image
+  Image,
+  ToastAndroid
 } from 'react-native';
 import {socket} from '../elements/Socket';
 import {useNavigation} from '@react-navigation/native';
@@ -41,7 +42,29 @@ export default LineAnswers = ({route}) => {
   useEffect(() => {
     socket.on('end', ({notify, user1, user2}) => {
       setNotify(notify);
-      console.log('Jeets thuc roi');
+      navigation.navigate('Result', {user1, user2});
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on('555', ({notify, user1, user2}) => {
+      setNotify(notify);
+      ToastAndroid.showWithGravity(
+        "Đối thủ đã thoát!",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+      navigation.navigate('Result', {user1, user2});
+    });
+  }, []);
+  useEffect(() => {
+    socket.on('666', ({notify, user1, user2}) => {
+      setNotify(notify);
+      ToastAndroid.showWithGravity(
+        "Đối thủ đã thoát!",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
       navigation.navigate('Result', {user1, user2});
     });
   }, []);
@@ -54,8 +77,10 @@ export default LineAnswers = ({route}) => {
       }
     }, 1000);
   };
-  useEffect(() => {}, [user2]);
-  useEffect(() => {}, [user1]);
+
+ const exitGame = () => {
+  socket.emit('EXIT');
+ }
   useEffect(() => {
     handleClick();
   }, []);
@@ -82,6 +107,23 @@ export default LineAnswers = ({route}) => {
             resizeMode="cover"
             style={styles.image}>
            <View style={{paddingTop:40, paddingBottom: 40}}>
+           <View
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  right: -50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  }}>
+                   
+                
+                 <TouchableOpacity onPress={exitGame}>
+                 <Image  style={styles.logoImg2}
+               resizeMode="cover"
+              source={require('../../assets/imgs/out3.png')} />
+                 </TouchableOpacity>
+
+              </View>
            <ImageBackground
               style={styles.logoImgInfor}
               resizeMode="contain"
@@ -97,18 +139,21 @@ export default LineAnswers = ({route}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   }}>
+                      <Text style={{color: 'white', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>Điểm số</Text>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                  <View style={{paddingHorizontal: 20}}>
-                 <Text style={styles.questionNumber}>Bạn</Text>
                  <Text style={{color: '#df7821', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>
                   {user1.score}
                   </Text>
+                 <Text style={styles.questionNumber}>{user1.name}</Text>
+                 
                  </View>
                  <View style={{paddingHorizontal: 20, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                 <Text style={styles.questionNumber}>Đối thủ</Text>
                  <Text style={{color: 'white', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>
                    {user2.score}
                   </Text>
+                 <Text style={styles.questionNumber}>{user2.name}</Text>
+  
                  </View>
                 
             </View>
@@ -224,6 +269,10 @@ const styles = StyleSheet.create({
   logoImg1: {
     width: 100,
     height: 100,
+  },
+  logoImg2: {
+    width: 50,
+    height: 50,
   },
   logoImgInfor: {
     width: 250,

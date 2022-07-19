@@ -44,19 +44,19 @@ export default Result = ({route}) => {
                   <View style={{paddingHorizontal: 20}}>
                     <Text style={styles.answerText}>Người chiến thắng</Text>
                     <Text style={{color: '#df7821', fontSize: 32, fontWeight: 'bold', textAlign: 'center'}}>{user1.score > user2.score ? user1.score : user2.score} điểm</Text>
+                    <Text style={{color: 'white', fontSize: 24, fontWeight: 'bold', textAlign: 'center'}}>{user1.score > user2.score ? user1.name : user2.name}</Text>
                   </View>
                 
             </View>
               </View>
         </ImageBackground>
 
-        <Text style={styles.answerText}>KẾT THÚC</Text>
-        <Text>Thông tin người chơi</Text>
-        <Text>
-          {user1.id}: {user1.score}
+        <Text style={styles.answerTextTitle}>THÔNG TIN TRẬN ĐẤU</Text>
+        <Text style={styles.answerText}>
+          {user1.name}: {user1.score} điểm
         </Text>
-        <Text>
-          {user2.id}: {user2.score}
+        <Text style={styles.answerText}>
+          {user2.name}: {user2.score} điểm
         </Text>
       
         <TouchableOpacity onPress={goBackHome}>
@@ -65,7 +65,7 @@ export default Result = ({route}) => {
             resizeMode="contain"
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>
-              <Text style={styles.answerText}>Quay lại trang chủ</Text>
+              <Text style={styles.answerTextTitle}>Quay lại trang chủ</Text>
             </View>
           </ImageBackground>
         </TouchableOpacity>
@@ -102,6 +102,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   answerText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500',
+    fontStyle: 'italic'
+  },
+  answerTextTitle: {
     color: 'white',
     fontSize: 16,
     fontWeight: '500',
