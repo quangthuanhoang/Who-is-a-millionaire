@@ -14,8 +14,8 @@ import {useNavigation} from '@react-navigation/native';
 import {socket} from '../elements/Socket';
 
 const windowWidth = Dimensions.get('window').width;
-export default RoomWaiting = () => {
-  let roomId;
+export default RoomWaiting = ({route}) => {
+  let {roomId} = route.params
   const navigation = useNavigation();
   socket.on('215', ({roomId: r}) => {
     roomId = r;

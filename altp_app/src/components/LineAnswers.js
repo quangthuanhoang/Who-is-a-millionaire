@@ -20,6 +20,8 @@ export default LineAnswers = ({route}) => {
   const [roomId, setRoomId] = useState('');
   const [user1, setUser1] = useState({});
   const [user2, setUser2] = useState({});
+  const [answer, setAnswer] = useState(-1)
+  const [answerSelect, setAnswerSelect] = useState(-1)
   const navigation = useNavigation();
   socket.on('question', ({question, time, roomId: r, user1, user2}) => {
     if (question) {
@@ -32,6 +34,8 @@ export default LineAnswers = ({route}) => {
       setRoomId(r);
       setUser1(user1);
       setUser2(user2);
+      setAnswer(-1)
+      setAnswerSelect(-1)
     }
   });
   useEffect(() => {
@@ -41,7 +45,6 @@ export default LineAnswers = ({route}) => {
       navigation.navigate('Result', {user1, user2});
     });
   }, []);
-
   const handleClick = () => {
     const timer = setInterval(() => {
       if (!notify) {
@@ -59,12 +62,15 @@ export default LineAnswers = ({route}) => {
   function answerQuestion(idx) {
     const {index} = question;
     socket.emit('ANSWER', {userAnswer: idx, roomId, indexQuestion: +index + 1});
+    setAnswerSelect(idx)
   }
 
   useEffect(() => {
-    socket.on('230', ({user1, user2}) => {
+    socket.on('230', ({user1, user2, answer}) => {
       setUser2(user2);
       setUser1(user1);
+      setAnswer(answer)
+      console.log("ans", answer)
     });
   }, []);
   return (
@@ -177,9 +183,9 @@ export default LineAnswers = ({route}) => {
                     }}>
                     <ImageBackground
                       source={
-                        item.select
-                          ? require('../../assets/imgs/answer_select.png')
-                          : require('../../assets/imgs/answer.png')
+                       index === answer
+                          ? require('../../assets/imgs/answer_correct.png')
+                          : (index === answerSelect ? require('../../assets/imgs/answer_select.png'): require('../../assets/imgs/answer.png'))
                       }
                       resizeMode="contain"
                       style={styles.logoImg}>

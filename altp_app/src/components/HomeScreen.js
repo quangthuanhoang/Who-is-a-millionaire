@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  ToastAndroid
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {socket} from '../elements/Socket';
@@ -27,10 +28,20 @@ export default HomeScreen = () => {
   socket.on('211', console.log);
   socket.on('220', console.log);
 
-  socket.on('res', () => {
-    console.log('naby');
-  });
-
+  useEffect(() => {
+    socket.on("266", ({roomId}) => {
+      navigation.navigate('RoomWaiting', {roomId});
+    })
+  }, [])
+  useEffect(() => {
+    socket.on("267", ({message}) => {
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+    })
+  }, [])
   //Theo dõi người chơi vào phòng
   const createRoom = () => {
     socket.emit('CREATEROOM');
@@ -43,6 +54,11 @@ export default HomeScreen = () => {
     socket.emit('STARTGAME', roomId);
     navigation.navigate('LineAnswers', {roomId});
   };
+
+  const joinRandomRoom = () => {
+    console.log("joinRandomRoom")
+    socket.emit('JOINRANDOMROOM');
+  }
 
   return (
     <View style={styles.container}>
@@ -80,20 +96,16 @@ export default HomeScreen = () => {
           </ImageBackground>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={startGame}>
+        <TouchableOpacity onPress={joinRandomRoom}>
           <ImageBackground
             source={require('../../assets/imgs/button.png')}
             resizeMode="contain"
             style={styles.buttonStyle}>
             <View style={styles.answerStyle}>
-              <Text style={styles.answerText}>Bắt đầu trò chơi</Text>
+              <Text style={styles.answerText}>Vào phòng ngẫu nhiên</Text>
             </View>
           </ImageBackground>
         </TouchableOpacity>
-
-        {/* <Text>{msg}</Text>
-          <TouchableOpacity onPress={startGame} style={{backgroundColor: 'pink', padding: 10}}><Text>Bắt đầu chơi</Text></TouchableOpacity>
-          <Text>{question}</Text> */}
       </ImageBackground>
     </View>
   );
