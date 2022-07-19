@@ -6,7 +6,7 @@ let roomActives = [];
 const currentRoomQuestions = {};
 
 const MAX_Q = 5;
-const MAX_TIME = 15000;
+const MAX_TIME = 5000;
 
 function handle(io) {
   eventEmitter.on("nextQuestion", ({ roomId, indexQuestion }) => {
@@ -15,8 +15,12 @@ function handle(io) {
         const index = roomActives.findIndex((object) => {
             return object.roomId === roomId;
           });
-         roomActives[index].user1.answered = 0;
-         roomActives[index].user2.answered = 0;
+        if( roomActives[index].user1.answered) {
+            roomActives[index].user1.answered = 0;
+        }
+        if( roomActives[index].user2.answered) {
+            roomActives[index].user2.answered = 0;
+        }
         const current = currentRoomQuestions[roomId];
         const { questions, currentIndex } = current;
         if (current.timeout) {
@@ -25,21 +29,7 @@ function handle(io) {
     const timeout = setTimeout(() => {
       currentRoomQuestions[roomId].currentIndex += 1;
       eventEmitter.emit("nextQuestion", {roomId, indexQuestion: +indexQuestion + 1});
-    }, MAX_TIME);
-    current.timeout = timeout;
-
-    if (current.max <= MAX_Q) {
-      io.to(roomId).emit("question", {
-        question: questions[currentIndex],
-        currentIndex,
-        time: 15,
-        roomId,
-        user1: roomActives[index].user1,
-        user2: roomActives[index].user2,
-      });
-    }
-    }
-    else {
+      if(roomActives[index].user1.answered === 0 && roomActives[index].user2.answered === 0 && indexQuestion === MAX_Q - 1) {
         const index = roomActives.findIndex((object) => {
             return object.roomId === roomId;
           });
@@ -48,6 +38,18 @@ function handle(io) {
             user1: roomActives[index].user1,
             user2: roomActives[index].user2,
           });
+    }
+    }, MAX_TIME);
+    current.timeout = timeout;
+
+    io.to(roomId).emit("question", {
+        question: questions[currentIndex],
+        currentIndex,
+        time: 5,
+        roomId,
+        user1: roomActives[index].user1,
+        user2: roomActives[index].user2,
+      });
     }
   });
 }
@@ -130,20 +132,20 @@ function listen(io) {
             const index = roomActives.findIndex((object) => {
               return object.roomId === roomId;
             });
-           if(indexQuestion < MAX_Q - 1) {
+           if(indexQuestion < MAX_Q) {
               if (roomActives[index].user1.id === socket.id) {
-                  console.log("user11111", socket.id);
-                 if(!roomActives[index].user1.answered) {
+                 if(roomActives[index].user1.answered === 0) {
+                    console.log('user 1', currentQuesion.correct, Number(userAnswer))
                     if (currentQuesion.correct === Number(userAnswer)) {
                         roomActives[index].user1.score += 10;
-              
+                        console.log('đúng trong user 1');
+                        roomActives[index].user1.answered += 1
                         currentRoomQuestions[roomId].currentIndex += 1;
                         eventEmitter.emit("nextQuestion", { roomId, indexQuestion });
-                      } else if (currentQuesion.correct !== Number(userAnswer)) {
+                      } else {
                         roomActives[index].user1.score -= 5;
-                        roomActives[index].user1.answered += 1;
-                        console.log('user1', roomActives[index].user1);
-                        console.log('user2', roomActives[index].user2);
+                        roomActives[index].user1.answered += 1
+                        console.log('sai trong user 1');
                       io.to(roomId).emit("230", {
                           roomId,
                           user1: roomActives[index].user1,
@@ -151,22 +153,24 @@ function listen(io) {
                       });
                       }
                  }
-                  if( roomActives[index].user1.answered ===  roomActives[index].user2.answered){
+                   if( roomActives[index].user1.answered && roomActives[index].user2.answered){
+                    console.log('Đã trả lời rồi');
                     currentRoomQuestions[roomId].currentIndex += 1;
                     eventEmitter.emit("nextQuestion", { roomId, indexQuestion });
                   }
-                } else if (roomActives[index].user2.id === socket.id && !roomActives[index].user2.answered) {
-                  console.log("user2222", socket.id);
-                if(!roomActives[index].user2.answered) {
+                } else if (roomActives[index].user2.id === socket.id) {
+                if(roomActives[index].user2.answered === 0) {
+                    console.log('user 2', currentQuesion.correct, Number(userAnswer))
                     if (currentQuesion.correct === Number(userAnswer)) {
                         roomActives[index].user2.score += 10;
+                        roomActives[index].user2.answered += 1
+                        console.log('đúng trong user 2');
                         currentRoomQuestions[roomId].currentIndex += 1;
                         eventEmitter.emit("nextQuestion", { roomId, indexQuestion });
-                      } else if (currentQuesion.correct !== Number(userAnswer)) {
+                      } else {
+                        console.log('sai trong user 2');
                         roomActives[index].user2.score -= 5;
-                        roomActives[index].user2.answered += 1;
-                        console.log('user1', roomActives[index].user1);
-                        console.log('user2', roomActives[index].user2);
+                        roomActives[index].user2.answered += 1
                         io.to(roomId).emit("230", {
                           roomId,
                           user1: roomActives[index].user1,
@@ -174,7 +178,9 @@ function listen(io) {
                       });
                       }
                 }
-                  if( roomActives[index].user1.answered ===  roomActives[index].user2.answered){
+        
+                if( roomActives[index].user1.answered &&  roomActives[index].user2.answered){
+                    console.log('Đã trả lời rồi ở trong else');
                     currentRoomQuestions[roomId].currentIndex += 1;
                     eventEmitter.emit("nextQuestion", { roomId, indexQuestion });
                   }
@@ -182,7 +188,6 @@ function listen(io) {
            }
            else {
               if (roomActives[index].user1.id === socket.id) {
-                  console.log("user11111", socket.id);
                   if (currentQuesion.correct === Number(userAnswer)) {
                     roomActives[index].user1.score += 10;
           
@@ -201,7 +206,6 @@ function listen(io) {
                     });
                   }
                 } else if (roomActives[index].user2.id === socket.id) {
-                  console.log("user2222", socket.id);
                   if (currentQuesion.correct === Number(userAnswer)) {
                     roomActives[index].user2.score += 10;
                     io.to(roomId).emit("end", {

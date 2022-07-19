@@ -37,6 +37,7 @@ export default LineAnswers = ({route}) => {
   useEffect(() => {
     socket.on('end', ({notify, user1, user2}) => {
       setNotify(notify);
+      console.log('Jeets thuc roi');
       navigation.navigate('Result', {user1, user2});
     });
   }, []);
@@ -105,7 +106,7 @@ export default LineAnswers = ({route}) => {
                  </View>
                 
             </View>
-                </View>
+              </View>
             </ImageBackground>
            <View style={{position: 'absolute',right: -45, bottom: 10}}>
            <ImageBackground
