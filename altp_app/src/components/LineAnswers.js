@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
-  Image,
+  Image
 } from 'react-native';
 import {socket} from '../elements/Socket';
 import {useNavigation} from '@react-navigation/native';
@@ -40,6 +40,7 @@ export default LineAnswers = ({route}) => {
       navigation.navigate('Result', {user1, user2});
     });
   }, []);
+
   const handleClick = () => {
     const timer = setInterval(() => {
       if (!notify) {
@@ -62,7 +63,7 @@ export default LineAnswers = ({route}) => {
   useEffect(() => {
     socket.on('230', ({user1, user2}) => {
       setUser2(user2);
-      setUser2(user1);
+      setUser1(user1);
     });
   }, []);
   return (
@@ -77,7 +78,7 @@ export default LineAnswers = ({route}) => {
               style={styles.logoImg1}
               source={require('../../assets/imgs/logo.png')}
             /> */}
-            <View style={{flex: 1, backgroundColor: '#fefef1'}}>
+            <View style={{ backgroundColor: 'red'}}>
               <Text>Thông tin người chơi</Text>
               <Text>
                 {user1.id}: {user1.score}

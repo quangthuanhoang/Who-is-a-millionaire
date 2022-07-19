@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  ToastAndroid
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {socket} from '../elements/Socket';
@@ -21,10 +22,16 @@ export default RoomWaiting = () => {
   });
   const startGame = () => {
     socket.emit('STARTGAME', roomId);
-    navigation.navigate('LineAnswers', {roomId});
   };
   socket.on('233', data => {
     navigation.navigate('LineAnswers', {roomId});
+  });
+  socket.on('239', data => {
+    ToastAndroid.showWithGravity(
+      "Chưa đủ người chơi",
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER
+    );
   });
   return (
     <View style={styles.container}>
