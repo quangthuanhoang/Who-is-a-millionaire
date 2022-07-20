@@ -1,12 +1,13 @@
 const genQuestion = require("./question");
 const events = require("events");
+const e = require("express");
 const eventEmitter = new events.EventEmitter();
 let roomCreatedNotStart = [];
 let roomActives = [];
 const currentRoomQuestions = {};
 
 const MAX_Q = 5;
-const MAX_TIME = 1500000;
+const MAX_TIME = 15000;
 
 function handle(io) {
   eventEmitter.on("nextQuestion", ({ roomId, indexQuestion }) => {
@@ -34,7 +35,7 @@ function handle(io) {
             return object.roomId === roomId;
           });
       if(index !== -1) {
-        io.to(roomId).emit("end", {
+        io.in(roomId).emit("end", {
             notify: "Kết thúc rồi",
             user1: roomActives[index].user1,
             user2: roomActives[index].user2,
@@ -44,10 +45,10 @@ function handle(io) {
     }, MAX_TIME);
     current.timeout = timeout;
 
-    io.to(roomId).emit("question", {
+    io.in(roomId).emit("question", {
         question: questions[currentIndex],
         currentIndex,
-        time: 1500,
+        time: 15,
         roomId,
         user1: roomActives[index].user1,
         user2: roomActives[index].user2,
@@ -59,7 +60,7 @@ function handle(io) {
 function listen(io) {
   handle(io);
   io.on("connection", (socket) => {
-    let roomCode = undefined;
+    let roomCode = '';
  
     // 1. Tạo phòng chơi
     socket.on("CREATEROOM", (name) => {
@@ -81,56 +82,69 @@ function listen(io) {
 
     // 2. Vào phòng chơi
     socket.on("JOINROOM", ({roomId, name}) => {
-     if(io.sockets.adapter.rooms.get(roomId).size  < 2) {
+    if(io.sockets.adapter.rooms.get(roomId)) {
+      if(io.sockets.adapter.rooms.get(roomId).size  < 2) {
         const index = roomCreatedNotStart.findIndex((object) => {
             return object.roomId === roomId;
           });
          if(index !== -1) {
             const element = roomCreatedNotStart.splice(index, 1)[0];
+           if(element.user1.id !== socket.id) {
             element.user2 = { id: socket.id, score: 0, answered: 0, name };
-            roomActives.push(element);
-            socket.join(roomId);
-            io.to(roomId).emit("215", { message: "Đã có 2 người chơi", roomId, user2: element.user2, user1: element.user1 });
+           }
+           else {
+            element.user2 = { id: socket.id, score: 0, answered: 0, name };
+           }
+           roomActives.push(element);
+           socket.join(roomId);
+           io.in(roomId).emit("215", { message: "Phòng chơi đã có đủ 2 người", roomId, user2: element.user2, user1: element.user1 });
+           socket.emit("thayPhong", { message: "Tim thay phong roi",  roomId, user2: element.user2, user1: element.user1 });
+     }
+    
      }
      else {
-        io.to(roomId).emit("777", { message: "Phòng đã đầy", roomId});
-     }
-     }
+      socket.emit("777", { message: "Phòng đã đầy", roomId});
+   }
+    }
+    else {
+      socket.emit("saiCode", { message: "Không tìm thấy phòng!", roomId});
+   }
     });
     // 3. Bắt đầu trò chơi
     socket.on("STARTGAME", (roomId) => {
+       if(io.sockets.adapter.rooms.get(roomId)) {
         if(io.sockets.adapter.rooms.get(roomId).size === 2) {
-            const index = roomActives.findIndex((object) => {
-                return object.roomId === roomId;
-              });
-             if(index !== -1) {
-                console.log('Vẫn vào đây');
-                io.to(roomId).emit("233", {
-                    title: "Trò chơi bắt đầu rồi",
-                    check: true,
-                    roomId,
-                    user1: roomActives[index].user1,
-                    user2: roomActives[index].user2,
-                  });
-             }
-              let questions = genQuestion(MAX_Q);
-              for (const index in questions) {
-                questions[index] = { ...questions[index], index };
-              }
-              if (!currentRoomQuestions[roomId]) {
-                currentRoomQuestions[roomId] = {
-                  questions,
-                  currentIndex: 0,
-                  max: MAX_Q - 1,
-                };
-              }
-              eventEmitter.emit("nextQuestion", { roomId, indexQuestion: 0 });
-        } else {
-           socket.emit("239", {
-                notify: "Chưa đủ người chơi",
-                roomId
-              });
-        }
+          const index = roomActives.findIndex((object) => {
+              return object.roomId === roomId;
+            });
+           if(index !== -1) {
+              io.in(roomId).emit("233", {
+                  title: "Trò chơi bắt đầu rồi",
+                  check: true,
+                  roomId,
+                  user1: roomActives[index].user1,
+                  user2: roomActives[index].user2,
+                });
+           }
+            let questions = genQuestion(MAX_Q);
+            for (const index in questions) {
+              questions[index] = { ...questions[index], index };
+            }
+            if (!currentRoomQuestions[roomId]) {
+              currentRoomQuestions[roomId] = {
+                questions,
+                currentIndex: 0,
+                max: MAX_Q - 1,
+              };
+            }
+            eventEmitter.emit("nextQuestion", { roomId, indexQuestion: 0 });
+      } else {
+         socket.emit("239", {
+              notify: "Chưa đủ người chơi",
+              roomId
+            });
+      }
+       }
 
     });
 
@@ -196,7 +210,7 @@ function listen(io) {
                    if (currentQuesion.correct === Number(userAnswer)) {
                        roomActives[index].user1.score += 10;
                        roomActives[index].user1.answered += 1
-                       io.to(roomId).emit("end", {
+                       io.in(roomId).emit("end", {
                         notify: "Kết thúc rồi",
                         user1: roomActives[index].user1,
                         user2: roomActives[index].user2,
@@ -213,7 +227,7 @@ function listen(io) {
                      }
                 }
                   if( roomActives[index].user1.answered && roomActives[index].user2.answered){
-                   io.to(roomId).emit("end", {
+                   io.in(roomId).emit("end", {
                     notify: "Kết thúc rồi",
                     user1: roomActives[index].user1,
                     user2: roomActives[index].user2,
@@ -224,7 +238,7 @@ function listen(io) {
                    if (currentQuesion.correct === Number(userAnswer)) {
                        roomActives[index].user2.score += 10;
                        roomActives[index].user2.answered += 1
-                       io.to(roomId).emit("end", {
+                       io.in(roomId).emit("end", {
                         notify: "Kết thúc rồi",
                         user1: roomActives[index].user1,
                         user2: roomActives[index].user2,
@@ -243,7 +257,7 @@ function listen(io) {
                }
        
                if( roomActives[index].user1.answered &&  roomActives[index].user2.answered){
-                   io.to(roomId).emit("end", {
+                   io.in(roomId).emit("end", {
                     notify: "Kết thúc rồi",
                     user1: roomActives[index].user1,
                     user2: roomActives[index].user2,
@@ -257,7 +271,7 @@ function listen(io) {
     socket.on("EXIT", () => {
       for(const roomAcitve of roomActives) {
         if(roomAcitve.user1.id === socket.id || roomAcitve.user2.id === socket.id ) {
-            io.to(roomAcitve.roomId).emit("666", {
+          socket.to(roomAcitve.roomId).emit("666", {
                 notify: "Kết thúc rồi",
                 user1: roomAcitve.user1,
                 user2: roomAcitve.user2,
@@ -271,7 +285,7 @@ function listen(io) {
     socket.on('disconnect', function() {
        for(const roomAcitve of roomActives) {
         if(roomAcitve.user1.id === socket.id || roomAcitve.user2.id === socket.id ) {
-            io.to(roomAcitve.roomId).emit("555", {
+            io.in(roomAcitve.roomId).emit("555", {
                 notify: "Kết thúc rồi",
                 user1: roomAcitve.user1,
                 user2: roomAcitve.user2,
@@ -289,6 +303,7 @@ function listen(io) {
         roomActives.push(element);
         socket.join(element.roomId);
         socket.emit("266", {message: 'Đã tìm thấy phòng', roomId: element.roomId, user1: element.user1, user2: element.user2})
+        io.in(element.roomId).emit("TEST", { roomId: element.roomId, user1: element.user1, user2: element.user2});
     }
     else {
         socket.emit("267", {message: 'Hiện tại không có phòng trống'})

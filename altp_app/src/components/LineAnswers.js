@@ -26,9 +26,6 @@ export default LineAnswers = ({route}) => {
   const navigation = useNavigation();
   socket.on('question', ({question, time, roomId: r, user1, user2}) => {
     if (question) {
-      question.content.forEach(item => {
-        item.select = false;
-      });
       setQuestion(question);
       setQuestionIndex(question.index);
       setCount(time);
@@ -50,7 +47,7 @@ export default LineAnswers = ({route}) => {
     socket.on('555', ({notify, user1, user2}) => {
       setNotify(notify);
       ToastAndroid.showWithGravity(
-        "Đối thủ đã thoát!",
+        "Đối thủ đã mất kết nối!",
         ToastAndroid.SHORT,
         ToastAndroid.CENTER
       );
@@ -80,6 +77,7 @@ export default LineAnswers = ({route}) => {
 
  const exitGame = () => {
   socket.emit('EXIT');
+  navigation.navigate('Result', {user1, user2});
  }
   useEffect(() => {
     handleClick();
@@ -95,7 +93,6 @@ export default LineAnswers = ({route}) => {
       setUser2(user2);
       setUser1(user1);
       setAnswer(answer)
-      console.log("ans", answer)
     });
   }, []);
   return (
@@ -256,7 +253,9 @@ export default LineAnswers = ({route}) => {
           </ImageBackground>
         </View>
       ) : (
-        <Text>Hiện tại chưa bắt đầu</Text>
+        <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+          <Text>Đang tải câu hỏi</Text>
+        </View>
       )}
     </>
   );

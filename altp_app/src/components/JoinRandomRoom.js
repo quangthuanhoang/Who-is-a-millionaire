@@ -19,9 +19,6 @@ export default JoinRandomRoom = () => {
   const [name, setName] = useState('');
   const navigation = useNavigation();
  
-  // Thông báo có người chơi khác vào phòng
-  socket.on('211', console.log);
-  socket.on('220', console.log);
 
   useEffect(() => {
     socket.on("266", ({roomId, user1, user2}) => {

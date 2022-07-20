@@ -17,24 +17,27 @@ const windowWidth = Dimensions.get('window').width;
 export default JoinRoom = () => {
   const [roomId, setRoomId] = useState('');
   const [name, setName] = useState('');
-  //   const [roomCode, setRoomcCode] = useState('');r
   const navigation = useNavigation();
-  // Thông báo có người chơi khác vào phòng
-  socket.on('211', console.log);
-  socket.on('220', console.log);
 
+ 
   useEffect(() => {
-    socket.on("266", ({roomId}) => {
-      navigation.navigate('RoomWaiting', {roomId});
+    socket.on("saiCode", ({message}) => {
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
     })
   }, [])
- 
-  //Theo dõi người chơi vào phòng
 
+  useEffect(() => {
+    socket.on("thayPhong", ({roomId, user1, user2}) => {
+      navigation.navigate('RoomWaiting', {roomId, user1, user2});
+    })
+  }, [])
   const joinRoom = () => {
    if(name !== '' && roomId !== '') {
     socket.emit('JOINROOM', {roomId, name});
-    navigation.navigate('RoomWaiting', {roomId});
    }
    else {
     ToastAndroid.showWithGravity(
@@ -63,7 +66,7 @@ export default JoinRoom = () => {
         />
          <TextInput
           placeholderTextColor='white'
-          style={{height: 60, borderBottomColor: '#ffffff', borderBottomWidth: 3, width: windowWidth*0.8, marginHorizontal: 10, marginVertical: 10, fontSize: 16, color: 'white'}}
+          style={{height: 60, borderBottomColor: '#ffffff', borderBottomWidth: 3, width: windowWidth*0.8, marginHorizontal: 10, marginVertical: 5, fontSize: 16, color: 'white'}}
           placeholder="Nhập mã phòng"
           onChangeText={newText => setRoomId(newText)}
         />
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   },
   logoImg: {
     width: 300,
-    height: 300,
+    height: 250,
   },
   image: {
     flex: 1,

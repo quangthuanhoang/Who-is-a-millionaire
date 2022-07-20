@@ -20,12 +20,13 @@ export default RoomWaiting = ({route}) => {
   const [user2, setUser2] = useState(route.params.user2)
   const navigation = useNavigation();
   useEffect(() => {
-    socket.on('215', ({roomId: r, user2, user1}) => {
+    socket.on('215', ({roomId: r, user2, user1, message}) => {
+      console.log(r, user2, user1, message);
       roomId = r;
       setUser2(user2)
       setUser1(user1)
       ToastAndroid.showWithGravity(
-        "Đã có người chơi vào phòng",
+        message,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER
       );
@@ -38,6 +39,13 @@ export default RoomWaiting = ({route}) => {
         ToastAndroid.SHORT,
         ToastAndroid.CENTER
       );
+    });
+  }, [])
+
+  useEffect(() => {
+    socket.on('TEST', ({user1, user2}) => {
+      setUser2(user2)
+      setUser1(user1)
     });
   }, [])
   const startGame = () => {

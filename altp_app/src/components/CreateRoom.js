@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {socket} from '../elements/Socket';
-import Modal from "react-native-modal";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const windowWidth = Dimensions.get('window').width;
 export default CreateRoom = () => {
   const [name, setName] = useState('');
@@ -21,14 +21,11 @@ export default CreateRoom = () => {
   //   const [roomCode, setRoomcCode] = useState('');r
   const navigation = useNavigation();
   //1. Tạo phòng
-  socket.on('200', console.log);
+useEffect(() => {
   socket.on('210', ({roomId, user1}) => {
     navigation.navigate('RoomWaiting', {roomId});
   });
-  // Thông báo có người chơi khác vào phòng
-  socket.on('211', console.log);
-  socket.on('220', console.log);
-
+}, [])
 
   //Theo dõi người chơi vào phòng
   const createRoom = () => {
@@ -45,6 +42,7 @@ export default CreateRoom = () => {
   };
 
   return (
+    
     <View style={styles.container}>
       <ImageBackground
         source={require('../../assets/imgs/background.jpg')}
